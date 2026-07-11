@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="chargepoint_accessibility_description">Finds the configured ChargePoint station and activates its availability alert.</string>
+</resources>

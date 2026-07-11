@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TeslaHomeMusic.VoiceNotesPage"
+             Title="Voice Notes">
+    <ScrollView>
+        <Grid Padding="20"
+              RowDefinitions="Auto,*"
+              RowSpacing="18">
+            <VerticalStackLayout Spacing="4">
+                <Label Text="Voice Notes"
+                       FontSize="28"
+                       FontAttributes="Bold" />
+                <Label Text="Capture dictated notes, keep the raw text locally, and send selected notes to your OpenAI notes backend."
+                       FontSize="14"
+                       TextColor="{AppThemeBinding Light=#555555, Dark=#C8C8C8}" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Row="1"
+                                 Spacing="14">
+                <Border StrokeShape="RoundRectangle 8"
+                        Padding="14">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Draft"
+                               FontAttributes="Bold"
+                               FontSize="18" />
+                        <Editor x:Name="DraftEditor"
+                                AutoSize="TextChanges"
+                                MinimumHeightRequest="120"
+                                Placeholder="Dictated text from Assistant appears here. You can also type a note." />
+                        <Grid ColumnDefinitions="*,*"
+                              ColumnSpacing="10">
+                            <Button Text="Save"
+                                    Clicked="OnSaveClicked" />
+                            <Button Grid.Column="1"
+                                    Text="Send"
+                                    Clicked="OnSendDraftClicked" />
+                        </Grid>
+                        <Button Text="Dictate"
+                                Clicked="OnDictateClicked" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border StrokeShape="RoundRectangle 8"
+                        Padding="14">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Saved Notes"
+                               FontAttributes="Bold"
+                               FontSize="18" />
+                        <CollectionView x:Name="NotesCollection"
+                                        SelectionMode="Single"
+                                        SelectionChanged="OnNoteSelected">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border StrokeShape="RoundRectangle 8"
+                                            Padding="10"
+                                            Margin="0,0,0,10">
+                                        <VerticalStackLayout Spacing="4">
+                                            <Label Text="{Binding Title}"
+                                                   FontAttributes="Bold"
+                                                   LineBreakMode="WordWrap" />
+                                            <Label Text="{Binding RawText}"
+                                                   MaxLines="3"
+                                                   LineBreakMode="TailTruncation" />
+                                            <Label Text="{Binding CreatedAt, StringFormat='{0:g}'}"
+                                                   FontSize="12"
+                                                   TextColor="{AppThemeBinding Light=#666666, Dark=#BBBBBB}" />
+                                        </VerticalStackLayout>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                        <Button Text="Delete all saved notes"
+                                Clicked="OnDeleteAllNotesClicked"
+                                BackgroundColor="#B3261E"
+                                TextColor="White" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border StrokeShape="RoundRectangle 8"
+                        Padding="14">
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Status"
+                               FontAttributes="Bold" />
+                        <Label x:Name="StatusLabel"
+                               LineBreakMode="WordWrap" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border StrokeShape="RoundRectangle 8"
+                        Padding="14">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="OpenAI notes backend"
+                               FontAttributes="Bold" />
+                        <Entry x:Name="EndpointEditor"
+                               Placeholder="https://your-server.example/voice-notes"
+                               Keyboard="Url" />
+                        <Button Text="Save backend endpoint"
+                                Clicked="OnSaveEndpointClicked" />
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+        </Grid>
+    </ScrollView>
+</ContentPage>

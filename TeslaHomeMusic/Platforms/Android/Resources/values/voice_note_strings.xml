@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+	<string name="openai_note_short_label">Voice Memo</string>
+	<string name="openai_note_long_label">Open Voice Memo</string>
+</resources>

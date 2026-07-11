@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TeslaHomeMusic.MainPage"
+             Title="Tesla Home Music">
+    <ScrollView>
+        <Grid Padding="20"
+              RowDefinitions="Auto,*"
+              RowSpacing="18">
+            <VerticalStackLayout Spacing="4">
+                <Label Text="Tesla Home Music"
+                       FontSize="28"
+                       FontAttributes="Bold" />
+                <Label Text="Start YouTube Music when the Tesla connects, then play through the current Bluetooth audio route when you arrive home."
+                       FontSize="14"
+                       TextColor="{AppThemeBinding Light=#555555, Dark=#C8C8C8}" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Row="1"
+                                 Spacing="14">
+                <Border StrokeShape="RoundRectangle 8"
+                        Padding="14">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Tesla"
+                               FontAttributes="Bold"
+                               FontSize="18" />
+                        <Entry x:Name="TeslaDeviceNameEntry"
+                               Placeholder="Bluetooth name, for example Tesla"
+                               ReturnType="Next" />
+                        <Entry x:Name="TeslaBluetoothAddressEntry"
+                               Placeholder="Optional Bluetooth MAC address"
+                               ReturnType="Next" />
+                        <Button Text="Pick Paired Tesla"
+                                Clicked="OnPickTeslaClicked" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border StrokeShape="RoundRectangle 8"
+                        Padding="14">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Home"
+                               FontAttributes="Bold"
+                               FontSize="18" />
+                        <Entry x:Name="EchoDeviceNameEntry"
+                               Placeholder="Echo Bluetooth name, for example Echo Studio" />
+                        <Entry x:Name="EchoBluetoothAddressEntry"
+                               Placeholder="Optional Echo Bluetooth MAC address" />
+                        <Button Text="Pick Paired Echo"
+                                Clicked="OnPickEchoClicked" />
+                        <HorizontalStackLayout Spacing="10">
+                            <Switch x:Name="HomeEnabledSwitch"
+                                    VerticalOptions="Center" />
+                            <Label Text="Enable Echo-triggered home playback"
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border StrokeShape="RoundRectangle 8"
+                        Padding="14">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="YouTube Music"
+                               FontAttributes="Bold"
+                               FontSize="18" />
+                        <Entry x:Name="MusicUrlEntry"
+                               Placeholder="Optional YouTube Music playlist, album, or song URL" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border StrokeShape="RoundRectangle 8"
+                        Padding="14">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Office ChargePoint"
+                               FontAttributes="Bold"
+                               FontSize="18" />
+                        <Grid ColumnDefinitions="*,*"
+                              ColumnSpacing="10">
+                            <Entry x:Name="OfficeLatitudeEntry"
+                                   Keyboard="Numeric"
+                                   Placeholder="Office latitude" />
+                            <Entry x:Name="OfficeLongitudeEntry"
+                                   Grid.Column="1"
+                                   Keyboard="Numeric"
+                                   Placeholder="Office longitude" />
+                        </Grid>
+                        <Entry x:Name="OfficeRadiusEntry"
+                               Keyboard="Numeric"
+                               Placeholder="Office radius meters, for example 120" />
+                        <Button Text="Use Current Location"
+                                Clicked="OnUseCurrentOfficeLocationClicked" />
+						<Entry x:Name="ChargePointStationNameEntry"
+							   Placeholder="ChargePoint station name or shared prefix" />
+                        <HorizontalStackLayout Spacing="10">
+                            <Switch x:Name="ChargePointReminderEnabledSwitch"
+                                    VerticalOptions="Center" />
+                            <Label Text="Enable office ChargePoint reminder"
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+						<HorizontalStackLayout Spacing="10">
+							<Switch x:Name="ChargePointAlertAutomationEnabledSwitch"
+									VerticalOptions="Center" />
+							<Label Text="Auto-activate station availability alert"
+								   VerticalOptions="Center" />
+						</HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border StrokeShape="RoundRectangle 8"
+                        Padding="14">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="OpenAI Notes"
+                               FontAttributes="Bold"
+                               FontSize="18" />
+                        <Entry x:Name="OpenAiNotesEndpointEntry"
+                               Placeholder="Backend endpoint, for example https://api.example.com/notes" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Grid ColumnDefinitions="*,*"
+                      ColumnSpacing="10">
+                    <Button Text="Save"
+                            Clicked="OnSaveClicked" />
+                    <Button Grid.Column="1"
+                            Text="Permissions"
+                            Clicked="OnPermissionsClicked" />
+                </Grid>
+
+                <Grid ColumnDefinitions="*,*"
+                      ColumnSpacing="10">
+                    <Button Text="Test Tesla"
+                            Clicked="OnTestTeslaClicked" />
+                    <Button Grid.Column="1"
+                            Text="Test Echo"
+                            Clicked="OnTestEchoClicked" />
+                </Grid>
+
+                <Button Text="Test ChargePoint"
+                        Clicked="OnTestChargePointClicked" />
+
+                <Border StrokeShape="RoundRectangle 8"
+                        Padding="14">
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Status"
+                               FontAttributes="Bold" />
+                        <Label x:Name="StatusLabel"
+                               LineBreakMode="WordWrap" />
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+        </Grid>
+    </ScrollView>
+</ContentPage>

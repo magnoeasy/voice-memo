@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+	<shortcut
+		android:shortcutId="openai_note"
+		android:enabled="true"
+		android:icon="@mipmap/appicon"
+		android:shortcutShortLabel="@string/openai_note_short_label"
+		android:shortcutLongLabel="@string/openai_note_long_label">
+		<intent
+			android:action="android.intent.action.VIEW"
+			android:data="voxpad://voice-note"
+			android:targetPackage="com.fernandoalves.voxpad"
+			android:targetClass="com.fernandoalves.voxpad.MainActivity" />
+		<categories android:name="android.shortcut.conversation" />
+	</shortcut>
+</shortcuts>
