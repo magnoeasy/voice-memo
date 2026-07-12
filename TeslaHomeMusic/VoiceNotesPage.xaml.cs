@@ -11,6 +11,7 @@ public partial class VoiceNotesPage : ContentPage
 	private readonly IOpenAiNoteClient noteClient;
 	private readonly ISettingsStore settingsStore;
 	private readonly IVoiceNoteInbox noteInbox;
+	private readonly IVoiceNoteExporter noteExporter;
 	private readonly ISpeechToTextService? speechToText;
 	private bool isHandlingVoiceRequest;
 
@@ -25,6 +26,7 @@ public partial class VoiceNotesPage : ContentPage
 		noteClient = services.GetRequiredService<IOpenAiNoteClient>();
 		settingsStore = services.GetRequiredService<ISettingsStore>();
 		noteInbox = services.GetRequiredService<IVoiceNoteInbox>();
+		noteExporter = services.GetRequiredService<IVoiceNoteExporter>();
 		speechToText = services.GetService<ISpeechToTextService>();
 		noteInbox.VoiceRequested += OnVoiceRequested;
 		noteStore.NotesChanged += OnNotesChanged;
@@ -61,21 +63,15 @@ public partial class VoiceNotesPage : ContentPage
 		await RefreshAsync();
 	}
 
-	private async void OnSaveClicked(object? sender, EventArgs e)
-	{
-		await SaveDraftAsync(share: false);
-	}
+	private async void OnSaveClicked(object? sender, EventArgs e) => await SaveDraftAsync(share: false);
 
-	private async void OnSendDraftClicked(object? sender, EventArgs e)
-	{
-		await SaveDraftAsync(share: true);
-	}
+	private async void OnSendDraftClicked(object? sender, EventArgs e) => await SaveDraftAsync(share: true);
 
 	private async void OnDeleteAllNotesClicked(object? sender, EventArgs e)
 	{
 		var confirmed = await DisplayAlertAsync(
-			"Delete all saved notes?",
-			"This removes every saved note and any old audio files attached to those notes.",
+			"Permanently delete all saved notes?",
+			"This cannot be undone. It removes every saved note and any old audio files attached to those notes.",
 			"Delete all",
 			"Cancel");
 		if (!confirmed)
@@ -105,10 +101,7 @@ public partial class VoiceNotesPage : ContentPage
 		await RefreshAsync();
 	}
 
-	private void OnNotesChanged(object? sender, EventArgs e)
-	{
-		MainThread.BeginInvokeOnMainThread(async () => await RefreshAsync());
-	}
+	private void OnNotesChanged(object? sender, EventArgs e) => MainThread.BeginInvokeOnMainThread(async () => await RefreshAsync());
 
 	private async void OnVoiceRequested(object? sender, VoiceNoteRequestEventArgs e)
 	{
@@ -163,6 +156,62 @@ public partial class VoiceNotesPage : ContentPage
 
 		NotesCollection.SelectedItem = null;
 		await ShareAsync(displayNote.Note);
+	}
+
+	private async void OnExportNoteClicked(object? sender, EventArgs e)
+	{
+		if (sender is not Button { BindingContext: DisplayNote displayNote })
+		{
+			return;
+		}
+
+		try
+		{
+			var location = await noteExporter.ExportAsync(displayNote.Note, CancellationToken.None);
+			settingsStore.SetStatus($"Transcript exported to {location}.");
+		}
+		catch (Exception ex)
+		{
+			settingsStore.SetStatus(ex.Message);
+		}
+
+		await RefreshAsync();
+	}
+
+	private async void OnExportAndShareNoteClicked(object? sender, EventArgs e)
+	{
+		if (sender is not Button { BindingContext: DisplayNote displayNote })
+		{
+			return;
+		}
+
+		try
+		{
+			var location = await noteExporter.ExportAndShareAsync(displayNote.Note, CancellationToken.None);
+			settingsStore.SetStatus($"Transcript exported and ready to share from {location}.");
+		}
+		catch (Exception ex)
+		{
+			settingsStore.SetStatus(ex.Message);
+		}
+
+		await RefreshAsync();
+	}
+
+	private async void OnExportAllAndShareClicked(object? sender, EventArgs e)
+	{
+		try
+		{
+			var notes = await noteStore.LoadAsync(CancellationToken.None);
+			var location = await noteExporter.ExportAllAndShareAsync(notes, CancellationToken.None);
+			settingsStore.SetStatus($"All notes exported and ready to share from {location}.");
+		}
+		catch (Exception ex)
+		{
+			settingsStore.SetStatus(ex.Message);
+		}
+
+		await RefreshAsync();
 	}
 
 	private async Task SaveDraftAsync(bool share)
@@ -226,10 +275,7 @@ public partial class VoiceNotesPage : ContentPage
 		RefreshStatus();
 	}
 
-	private void RefreshStatus()
-	{
-		StatusLabel.Text = settingsStore.LastStatus;
-	}
+	private void RefreshStatus() => StatusLabel.Text = settingsStore.LastStatus;
 
 	private async Task DictateAsync()
 	{
