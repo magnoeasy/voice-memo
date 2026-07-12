@@ -32,7 +32,14 @@ public sealed class AndroidPermissionService : IPermissionService
 
 	private static IEnumerable<string> RequiredPermissions()
 	{
+	#if AUTOMATION_APP
+		yield return "android.permission.ACCESS_FINE_LOCATION";
+		yield return "android.permission.ACCESS_COARSE_LOCATION";
+		yield return "android.permission.BLUETOOTH_CONNECT";
+		yield return "android.permission.BLUETOOTH_SCAN";
+	#else
 		yield return "android.permission.RECORD_AUDIO";
+	#endif
 
 		if (Build.VERSION.SdkInt >= BuildVersionCodes.Tiramisu)
 		{
