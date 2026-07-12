@@ -9,12 +9,13 @@ using TeslaHomeMusic.Services;
 namespace TeslaHomeMusic.Platforms.Android;
 
 [BroadcastReceiver(Enabled = true, Exported = true)]
-[IntentFilter([BluetoothDevice.ActionAclConnected])]
+[IntentFilter(["android.bluetooth.a2dp.profile.action.CONNECTION_STATE_CHANGED"])]
 public sealed class BluetoothConnectionReceiver : BroadcastReceiver
 {
 	public override void OnReceive(Context? context, Intent? intent)
 	{
-		if (intent?.Action != BluetoothDevice.ActionAclConnected)
+		if (intent?.Action != "android.bluetooth.a2dp.profile.action.CONNECTION_STATE_CHANGED" ||
+			intent.GetIntExtra("android.bluetooth.profile.extra.STATE", 0) != 2)
 		{
 			return;
 		}
