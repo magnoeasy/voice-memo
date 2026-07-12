@@ -28,6 +28,7 @@ public static class MauiProgram
 #if ANDROID
 		builder.Services.AddSingleton<IPermissionService, Platforms.Android.AndroidPermissionService>();
 		builder.Services.AddSingleton<ISpeechToTextService, Platforms.Android.AndroidSpeechToTextService>();
+		builder.Services.AddSingleton<IVoiceNoteExporter, Platforms.Android.AndroidVoiceNoteExporter>();
 #if AUTOMATION_APP
 		builder.Services.AddSingleton<IBluetoothDeviceStore, Platforms.Android.AndroidBluetoothDeviceStore>();
 		builder.Services.AddSingleton<IHomeArrivalMonitor, Platforms.Android.AndroidHomeArrivalMonitor>();
