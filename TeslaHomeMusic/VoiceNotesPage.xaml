@@ -65,11 +65,19 @@
                                             <Label Text="{Binding CreatedAt, StringFormat='{0:g}'}"
                                                    FontSize="12"
                                                    TextColor="{AppThemeBinding Light=#666666, Dark=#BBBBBB}" />
+                                            <Button Text="Export transcript"
+                                                    Clicked="OnExportNoteClicked"
+                                                    HorizontalOptions="Start" />
+                                            <Button Text="Export and share"
+                                                    Clicked="OnExportAndShareNoteClicked"
+                                                    HorizontalOptions="Start" />
                                         </VerticalStackLayout>
                                     </Border>
                                 </DataTemplate>
-                            </CollectionView.ItemTemplate>
+                                        </CollectionView.ItemTemplate>
                         </CollectionView>
+                        <Button Text="Export all and share"
+                                Clicked="OnExportAllAndShareClicked" />
                         <Button Text="Delete all saved notes"
                                 Clicked="OnDeleteAllNotesClicked"
                                 BackgroundColor="#B3261E"
